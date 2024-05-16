@@ -3,11 +3,14 @@ import os
 import logging
 from logging.config import dictConfig
 from dotenv import load_dotenv
+import json
 
 
 load_dotenv()
 
 DISCORD_API_SECRET = os.getenv("DISCORD_API_TOKEN")
+with open("data/role.json", "r+") as f:
+    COMMAND_PERMISSION_ROLE_NAME = json.load(f)["role"]
 
 BASE_DIR = pathlib.Path(__file__).parent
 
