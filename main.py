@@ -20,8 +20,9 @@ def run():
         logger.info("Loaded extension cmds.events")
         
         # discord.Object(id=1238923068651343882)
-        bot.tree.copy_global_to(guild=discord.Object(id=1238923068651343882))
+        # bot.tree.copy_global_to(guild=discord.Object(id=1238923068651343882))
         await bot.tree.sync(guild=discord.Object(id=1238923068651343882))
+        # await bot.tree.sync()
         logger.info("Synced command tree")
 
 
