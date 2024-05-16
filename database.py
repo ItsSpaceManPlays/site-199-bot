@@ -1,7 +1,7 @@
 import sqlite3
 from event import Event
 
-db_conn = sqlite3.connect("events.db")
+db_conn = sqlite3.connect("data/events.db")
 cursor = db_conn.cursor()
 
 def insert_event(event: Event):
