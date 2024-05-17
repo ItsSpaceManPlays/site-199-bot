@@ -10,8 +10,11 @@ from event import Event
 
 class MyGroup(app_commands.Group):
     @app_commands.command(name="create", description="Create an event")
-    @commands.has_role(settings.COMMAND_PERMISSION_ROLE_NAME)
     async def create(self, interaction: discord.Interaction, event_type: str, event_name: str, event_host: discord.Member):
+        if not settings.check_role_permission(interaction.guild, interaction.user):
+            await interaction.response.send_message("You dont have permission to use this command", ephemeral=True)
+            return
+
         if event_type.lower() != event.EVENT_SSD and event_type.lower() != event.EVENT_SSU:
             await interaction.response.send_message("Please enter a valid event type, e.g. \"ssu\" or \"ssd\"")
             return
@@ -23,8 +26,11 @@ class MyGroup(app_commands.Group):
         await interaction.response.send_message(f"Created {event_type} {event_name} for {event_host.display_name} successfully")
 
     @app_commands.command(name="remove", description="Remove an already existing event")
-    @commands.has_role(settings.COMMAND_PERMISSION_ROLE_NAME)
     async def remove(self, interaction: discord.Interaction, event_id: int):
+        if not settings.check_role_permission(interaction.guild, interaction.user):
+            await interaction.response.send_message("You dont have permission to use this command", ephemeral=True)
+            return
+        
         try:
             id, type, name, description, hostid = database.get_event_by_id(event_id)
         except TypeError as e:
@@ -37,8 +43,11 @@ class MyGroup(app_commands.Group):
         await interaction.response.send_message(f"Removed event {name}")
 
     @app_commands.command(name="list", description="Lists all active events")
-    @commands.has_role(settings.COMMAND_PERMISSION_ROLE_NAME)
     async def list(self, interaction: discord.Interaction):
+        if not settings.check_role_permission(interaction.guild, interaction.user):
+            await interaction.response.send_message("You dont have permission to use this command", ephemeral=True)
+            return
+
         events = database.get_all_events()
 
         responseText = "# Events: \n"
@@ -57,8 +66,11 @@ class MyGroup(app_commands.Group):
         await interaction.response.send_message(responseText)
 
     @app_commands.command(name="description", description="Change the description of an event")
-    @commands.has_role(settings.COMMAND_PERMISSION_ROLE_NAME)
     async def setdescription(self, interaction: discord.Interaction, event_id: int, event_description: str):
+        if not settings.check_role_permission(interaction.guild, interaction.user):
+            await interaction.response.send_message("You dont have permission to use this command", ephemeral=True)
+            return
+
         if not database.get_event_by_id(event_id):
             await interaction.response.send_message(f"There is no event with the id {event_id}")
             return

@@ -32,8 +32,10 @@ def run():
         await interaction.response.send_message(f"Pong! `{round(bot.latency * 1000)}ms`")
 
     @bot.tree.command(name="permissionrole", description="Set the role needed to use the bot")
-    @commands.has_permissions(administrator=True)
     async def setrole(interaction: discord.Interaction, role: discord.Role):
+        if not interaction.user.guild_permissions.administrator:
+            await interaction.response.send_message("You don't have required permission: Administrator to use this command")
+
         settings.COMMAND_PERMISSION_ROLE_NAME = role.name
         with open("data/role.json", "w+") as f:
             json.dump({"role": role.name}, f)

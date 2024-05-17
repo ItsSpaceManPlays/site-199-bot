@@ -3,6 +3,7 @@ import os
 import logging
 from logging.config import dictConfig
 from dotenv import load_dotenv
+import discord
 import json
 
 
@@ -11,6 +12,13 @@ load_dotenv()
 DISCORD_API_SECRET = os.getenv("DISCORD_API_TOKEN")
 with open("data/role.json", "r+") as f:
     COMMAND_PERMISSION_ROLE_NAME = json.load(f)["role"]
+
+def check_role_permission(guild: discord.Guild, member: discord.Member):
+    pRole: discord.Role = discord.utils.get(guild.roles, name=COMMAND_PERMISSION_ROLE_NAME)
+    if member.top_role.position >= pRole.position:
+        return True
+    else:
+        return False
 
 BASE_DIR = pathlib.Path(__file__).parent
 
