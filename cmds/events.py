@@ -14,7 +14,7 @@ class MyGroup(app_commands.Group):
     @app_commands.command(name="create", description="Create an event")
     async def create(self, interaction: discord.Interaction, event_type: str, event_name: str, event_host: discord.Member):
         logger.info(f"@{interaction.user.display_name} ran create command")
-        if not settings.check_role_permission(interaction.guild, interaction.user):
+        if not await settings.check_role_permission(interaction):
             await interaction.response.send_message("You dont have permission to use this command", ephemeral=True)
             logger.info("They did not have permission to use the command")
             return
@@ -34,7 +34,7 @@ class MyGroup(app_commands.Group):
     @app_commands.command(name="remove", description="Remove an already existing event")
     async def remove(self, interaction: discord.Interaction, event_id: int):
         logger.info(f"@{interaction.user.display_name} ran remove command")
-        if not settings.check_role_permission(interaction.guild, interaction.user):
+        if not await settings.check_role_permission(interaction):
             await interaction.response.send_message("You dont have permission to use this command", ephemeral=True)
             logger.info("They did not have permission to use the command")
             return
@@ -55,7 +55,7 @@ class MyGroup(app_commands.Group):
     @app_commands.command(name="list", description="Lists all active events")
     async def list(self, interaction: discord.Interaction):
         logger.info(f"@{interaction.user.display_name} ran list command")
-        if not settings.check_role_permission(interaction.guild, interaction.user):
+        if not await settings.check_role_permission(interaction):
             await interaction.response.send_message("You dont have permission to use this command", ephemeral=True)
             logger.info("They did not have permission to use the command")
             return
@@ -82,7 +82,7 @@ class MyGroup(app_commands.Group):
     @app_commands.command(name="description", description="Change the description of an event")
     async def setdescription(self, interaction: discord.Interaction, event_id: int, event_description: str):
         logger.info(f"@{interaction.user.display_name} ran description command")
-        if not settings.check_role_permission(interaction.guild, interaction.user):
+        if not await settings.check_role_permission(interaction):
             await interaction.response.send_message("You dont have permission to use this command", ephemeral=True)
             logger.info("They did not have permission to use the command")
             return

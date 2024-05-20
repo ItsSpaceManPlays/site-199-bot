@@ -20,9 +20,18 @@ DISCORD_API_SECRET = os.getenv("DISCORD_API_TOKEN")
 with open("data/role.json", "r+") as f:
     COMMAND_PERMISSION_ROLE_NAME = json.load(f)["role"]
 
-def check_role_permission(guild: discord.Guild, member: discord.Member):
-    pRole: discord.Role = discord.utils.get(guild.roles, name=COMMAND_PERMISSION_ROLE_NAME)
-    if member.top_role.position >= pRole.position:
+async def check_role_permission(interaction: discord.Interaction):
+    pRole: discord.Role = discord.utils.get(interaction.guild.roles, name=COMMAND_PERMISSION_ROLE_NAME)
+    if pRole == None:
+        alert_embed = discord.Embed(color=0xfca100, title="ALERT", description="No role is configured for the bot (do this by using /permissionsrole [ROLE]), defaulting to administrator permissions")
+
+        await interaction.channel.send(embed=alert_embed)
+        if interaction.user.guild_permissions.administrator:
+            return True
+        else:
+            return False
+
+    if interaction.user.top_role.position >= pRole.position:
         return True
     else:
         return False
