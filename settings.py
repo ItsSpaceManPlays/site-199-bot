@@ -9,6 +9,13 @@ import json
 
 load_dotenv()
 
+if not os.path.exists("data"):
+    os.mkdir("data")
+
+if not os.path.exists("data/role.json"):
+    with open("data/role.json", "w+") as f:
+        f.write("{\"role\": \"\"}")
+
 DISCORD_API_SECRET = os.getenv("DISCORD_API_TOKEN")
 with open("data/role.json", "r+") as f:
     COMMAND_PERMISSION_ROLE_NAME = json.load(f)["role"]

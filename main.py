@@ -3,10 +3,26 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import json
+import os
+
+import sqlite3
 
 logger = settings.logging.getLogger("bot")
 
 def run():
+
+    if not os.path.exists("data/events.db"):
+        c = sqlite3.connect("data/events.db").cursor()
+        c.execute("""CREATE TABLE events(
+                  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                  type TEXT,
+                  name TEXT,
+                  description TEXT,
+                  hostid INTEGER
+        )""")
+
+        c.connection.commit()
+
     intents = discord.Intents.default()
     intents.message_content = True
 
